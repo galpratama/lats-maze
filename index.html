@@ -8,9 +8,9 @@
   </head>
 
   <body>
-    <div id="maze-container-1" class="maze-container">
+    <div id="maze-container" class="maze-container">
       <div id="map-and-controls">
-        <div id="maze-map-1" class="maze-map">
+        <div id="maze-map" class="maze-map">
           <div id="tiles" class="layer"></div>
           <div id="sprites" class="layer"></div>
           <div id="success-msg">
@@ -581,62 +581,48 @@
          * Adds mouse down listeners to buttons
          */
         Game.prototype.buttonListeners = function () {
-          let up = document.getElementById("up");
-          let left = document.getElementById("left");
-          let down = document.getElementById("down");
-          let right = document.getElementById("right");
-
-          let upArrow = document.getElementById("arrow-up");
-          let leftArrow = document.getElementById("arrow-left");
-          let downArrow = document.getElementById("arrow-down");
-          let rightArrow = document.getElementById("arrow-right");
+          // grab the buttons
+          let buttons = {
+            up: {
+              button: document.getElementById("up"),
+              arrow: document.getElementById("arrow-up"),
+              move: this.moveUp,
+            },
+            left: {
+              button: document.getElementById("left"),
+              arrow: document.getElementById("arrow-left"),
+              move: this.moveLeft,
+            },
+            down: {
+              button: document.getElementById("down"),
+              arrow: document.getElementById("arrow-down"),
+              move: this.moveDown,
+            },
+            right: {
+              button: document.getElementById("right"),
+              arrow: document.getElementById("arrow-right"),
+              move: this.moveRight,
+            },
+          };
 
           // the sprite is out of date
           let obj = this;
-          up.addEventListener("mousedown", function () {
-            obj.moveUp();
-            obj.checkGoal();
-            obj.checkObstacles();
 
-            // Change into arrow-up-active.png for 250ms
-            upArrow.src = "arrow-up-active.png";
-            setTimeout(function () {
-              upArrow.src = "arrow-up.png";
-            }, 250);
-          });
-          down.addEventListener("mousedown", function () {
-            obj.moveDown();
-            obj.checkGoal();
-            obj.checkObstacles();
+          for (let key in buttons) {
+            let { button, arrow, move } = buttons[key];
 
-            // Change into arrow-down-active.png for 250ms
-            downArrow.src = "arrow-down-active.png";
-            setTimeout(function () {
-              downArrow.src = "arrow-down.png";
-            }, 250);
-          });
-          left.addEventListener("mousedown", function () {
-            obj.moveLeft();
-            obj.checkGoal();
-            obj.checkObstacles();
+            button.addEventListener("mousedown", function () {
+              move.call(obj);
+              obj.checkGoal();
+              obj.checkObstacles();
 
-            // Change into arrow-left-active.png for 250ms
-            leftArrow.src = "arrow-left-active.png";
-            setTimeout(function () {
-              leftArrow.src = "arrow-left.png";
-            }, 250);
-          });
-          right.addEventListener("mousedown", function () {
-            obj.moveRight();
-            obj.checkGoal();
-            obj.checkObstacles();
-
-            // Change into arrow-right-active.png for 250ms
-            rightArrow.src = "arrow-right-active.png";
-            setTimeout(function () {
-              rightArrow.src = "arrow-right.png";
-            }, 250);
-          });
+              // Change into arrow-{direction}-active.png for 250ms
+              arrow.src = `arrow-${key}-active.png`;
+              setTimeout(function () {
+                arrow.src = `arrow-${key}.png`;
+              }, 250);
+            });
+          }
         };
 
         /*
@@ -657,7 +643,6 @@
 
           // inner container, height. Need this.map
           map.style.height = this.map.length * this.tileDim + "px";
-
           map.style.width = this.map[0].length * this.tileDim + "px";
         };
 
@@ -689,11 +674,9 @@
           this.player.el = playerSprite;
         };
         /*
-         *  Add keyboard, button, and maze tap listeners
+         *  Add button, and maze tap listeners
          */
         Game.prototype.addListeners = function () {
-          this.keyboardListener();
-
           this.buttonListeners();
 
           // changing levels
@@ -704,7 +687,7 @@
          *  Initialization function called once
          */
         context.init = function (level_idx = 0) {
-          let myGame = new Game("maze-container-1", levels[level_idx]);
+          let myGame = new Game("maze-container", levels[level_idx]);
           let currentLevel = level_idx + 1;
 
           // encapsulate for multi-level
