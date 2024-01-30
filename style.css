@@ -28,6 +28,10 @@ body.warning {
 
 .maze-map {
   position: relative;
+  background-image: url(line.png);
+  background-size: 96% 96%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /*
@@ -51,6 +55,11 @@ p {
 /*
  * Controls
  */
+
+.controls-container {
+  display: flex;
+  align-items: center;
+}
 
 #controls {
   margin-left: 10px;
@@ -158,6 +167,21 @@ body.success #success-msg {
   transition: opacity 0.2 ease;
 }
 
+#warning-msg {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  position: absolute;
+  padding: 5px 5px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: calc(100% - 8px);
+}
+
+body.warning #warning-msg {
+  opacity: 1;
+  transition: opacity 0.2 ease;
+}
+
 /*
  * Layers and tiles are positioned absolutely
  * within coordinate system of .maze-map 
@@ -177,11 +201,11 @@ div.layer div {
  */
 
 .default .floor {
-  background-color: #e5f7ff;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .default .wall {
-  background-color: skyblue;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 /*
