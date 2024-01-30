@@ -24,12 +24,20 @@
         <!-- controls-->
         <div class="controls-container">
           <div id="controls">
-            <button id="up"></button>
+            <button id="up">
+              <img src="arrow-up.png" alt="" id="arrow-up" />
+            </button>
             <div id="horiz">
-              <button id="left"></button>
-              <button id="right"></button>
+              <button id="left">
+                <img src="arrow-left.png" alt="" id="arrow-left" />
+              </button>
+              <button id="right">
+                <img src="arrow-right.png" alt="" id="arrow-right" />
+              </button>
             </div>
-            <button id="down"></button>
+            <button id="down">
+              <img src="arrow-down.png" alt="" id="arrow-down" />
+            </button>
           </div>
         </div>
       </div>
@@ -578,27 +586,56 @@
           let down = document.getElementById("down");
           let right = document.getElementById("right");
 
+          let upArrow = document.getElementById("arrow-up");
+          let leftArrow = document.getElementById("arrow-left");
+          let downArrow = document.getElementById("arrow-down");
+          let rightArrow = document.getElementById("arrow-right");
+
           // the sprite is out of date
           let obj = this;
           up.addEventListener("mousedown", function () {
             obj.moveUp();
             obj.checkGoal();
             obj.checkObstacles();
+
+            // Change into arrow-up-active.png for 250ms
+            upArrow.src = "arrow-up-active.png";
+            setTimeout(function () {
+              upArrow.src = "arrow-up.png";
+            }, 250);
           });
           down.addEventListener("mousedown", function () {
             obj.moveDown();
             obj.checkGoal();
             obj.checkObstacles();
+
+            // Change into arrow-down-active.png for 250ms
+            downArrow.src = "arrow-down-active.png";
+            setTimeout(function () {
+              downArrow.src = "arrow-down.png";
+            }, 250);
           });
           left.addEventListener("mousedown", function () {
             obj.moveLeft();
             obj.checkGoal();
             obj.checkObstacles();
+
+            // Change into arrow-left-active.png for 250ms
+            leftArrow.src = "arrow-left-active.png";
+            setTimeout(function () {
+              leftArrow.src = "arrow-left.png";
+            }, 250);
           });
           right.addEventListener("mousedown", function () {
             obj.moveRight();
             obj.checkGoal();
             obj.checkObstacles();
+
+            // Change into arrow-right-active.png for 250ms
+            rightArrow.src = "arrow-right-active.png";
+            setTimeout(function () {
+              rightArrow.src = "arrow-right.png";
+            }, 250);
           });
         };
 

@@ -6,7 +6,7 @@ body {
   text-align: center;
   background-color: #e5f7ff;
 }
-
+/* 
 body.success {
   background-color: #b7f0b7;
   transition: 0.2s ease;
@@ -15,7 +15,7 @@ body.success {
 body.warning {
   background-color: #f0b7b7;
   transition: 0.2s ease;
-}
+} */
 
 /* center everything in game container */
 .maze-container {
@@ -73,27 +73,30 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: -50px;
+  margin-bottom: -50px;
+  gap: 40px;
 }
 
 /* 
  * General button styles
  */
 #controls button {
-  padding: 10px 10px;
   margin-top: 10px;
-  background-color: #ddd;
-  border: 1px solid #000;
-  width: 38px;
-  height: 38px;
-  border-radius: 3px;
+  background: transparent;
+  border: 0;
   cursor: pointer;
   position: relative;
 }
 
+#controls button img {
+  width: 120px;
+  height: 120px;
+}
+
 /* disabled state */
 #controls button:disabled {
-  background-color: #eee;
-  border: 1px solid #ccc;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -112,7 +115,6 @@ button#left {
  * General button arrow styles
  */
 #controls button::before {
-  content: "";
   width: 0px;
   position: absolute;
 }
