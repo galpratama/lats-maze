@@ -30,6 +30,7 @@
       </div>
     </div>
     <script>
+      window.level = 0;
       let app = {};
 
       (function (context) {
@@ -68,8 +69,13 @@
           },
           obstacles: [
             {
-              x: 5,
-              y: 15,
+              x: 4,
+              y: 1,
+            },
+
+            {
+              x: 9,
+              y: 7,
             },
           ],
           theme: "default",
@@ -109,6 +115,11 @@
               x: 5,
               y: 15,
             },
+
+            {
+              x: 9,
+              y: 15,
+            },
           ],
         };
         // third level
@@ -144,6 +155,11 @@
           obstacles: [
             {
               x: 5,
+              y: 15,
+            },
+
+            {
+              x: 10,
               y: 15,
             },
           ],
@@ -183,6 +199,11 @@
               x: 5,
               y: 15,
             },
+
+            {
+              x: 7,
+              y: 15,
+            },
           ],
         };
         // fifth level
@@ -220,6 +241,11 @@
               x: 5,
               y: 15,
             },
+
+            {
+              x: 7,
+              y: 15,
+            },
           ],
         };
 
@@ -246,6 +272,9 @@
 
           // make a copy of the level's player.
           this.player = { ...level.player };
+
+          // make a copy of the level's obstacles.
+          this.obstacles = [...level.obstacles];
 
           // create a property for the DOM element, to be set later.
           this.player.el = null;
@@ -328,6 +357,23 @@
           layer.appendChild(sprite);
 
           return sprite;
+        };
+
+        /*
+         * Place the obstacles sprite.
+         */
+        Game.prototype.placeObstacles = function () {
+          // grab the layer
+          let layer = this.el.querySelector("#sprites");
+
+          // loop through the obstacles array
+          for (let obstacle of this.obstacles) {
+            // reuse the createTile function
+            let sprite = this.createEl(obstacle.x, obstacle.y, "obstacle");
+
+            // add to layer
+            layer.appendChild(sprite);
+          }
         };
 
         /*
@@ -460,6 +506,7 @@
               break;
           }
         };
+
         /*
          * Check on whether goal has been reached.
          */
@@ -467,10 +514,42 @@
           let body = document.querySelector("body");
 
           if (this.player.y == this.goal.y && this.player.x == this.goal.x) {
-            alert('You have reached the goal! Click "OK" to continue.');
+            console.log('You have reached the goal! Click "OK" to continue.');
             body.className = "success";
           } else {
             body.className = "";
+          }
+        };
+
+        /*
+         * Check on whether obstacles have been reached.
+         */
+        Game.prototype.checkObstacles = function () {
+          let body = document.querySelector("body");
+
+          // Check if player has hit an obstacle
+          for (let obstacle of this.obstacles) {
+            if (this.player.y == obstacle.y && this.player.x == obstacle.x) {
+              console.log(
+                "You have hit an obstacle! Please wait 3 seconds to continue.",
+              );
+
+              // disable controls for 3 seconds
+              document.getElementById("up").disabled = true;
+              document.getElementById("down").disabled = true;
+              document.getElementById("left").disabled = true;
+              document.getElementById("right").disabled = true;
+              body.className = "warning";
+
+              setTimeout(function () {
+                document.getElementById("up").disabled = false;
+                document.getElementById("down").disabled = false;
+                document.getElementById("left").disabled = false;
+                document.getElementById("right").disabled = false;
+                console.log("You can move again!");
+                body.className = "";
+              }, 3000);
+            }
           }
         };
         /*
@@ -498,6 +577,12 @@
 
           // make a copy of the level's goal object, since x and y change between levels.
           this.goal = { ...level.goal };
+
+          // make a copy of the level's obstacles array, since x and y change between levels.
+          this.obstacles = [...level.obstacles];
+
+          // log the level change.
+          console.log("Level changed to " + this.level_idx);
         };
 
         /*
@@ -535,6 +620,7 @@
 
             // check the goal to reset the message.
             obj.checkGoal();
+            obj.checkObstacles();
           });
         };
 
@@ -545,6 +631,7 @@
           document.addEventListener("keydown", (event) => {
             this.movePlayer(event);
             this.checkGoal();
+            this.checkObstacles();
           });
         };
         /*
@@ -561,18 +648,22 @@
           up.addEventListener("mousedown", function () {
             obj.moveUp();
             obj.checkGoal();
+            obj.checkObstacles();
           });
           down.addEventListener("mousedown", function () {
             obj.moveDown();
             obj.checkGoal();
+            obj.checkObstacles();
           });
           left.addEventListener("mousedown", function () {
             obj.moveLeft();
             obj.checkGoal();
+            obj.checkObstacles();
           });
           right.addEventListener("mousedown", function () {
             obj.moveRight();
             obj.checkGoal();
+            obj.checkObstacles();
           });
         };
 
@@ -610,6 +701,8 @@
 
           this.placeSprite("goal");
 
+          this.placeObstacles();
+
           // we want the DOM element that gets returned...
           let playerSprite = this.placeSprite("player");
 
@@ -631,14 +724,16 @@
         /*
          *  Initialization function called once
          */
-        context.init = function () {
-          let myGame = new Game("maze-container-1", levels[0]);
+        context.init = function (level_idx = 0) {
+          let myGame = new Game("maze-container-1", levels[level_idx]);
 
           // encapsulate for multi-level
           myGame.placeLevel();
 
           // add listeners
           myGame.addListeners();
+
+          console.log("Game initialized from Level " + level_idx);
         };
       })(app);
 
@@ -646,7 +741,7 @@
        * Tell app to activate the init() function.
        */
 
-      app.init();
+      app.init(window.level);
     </script>
   </body>
 </html>

@@ -12,6 +12,11 @@ body.success {
   transition: 0.2s ease;
 }
 
+body.warning {
+  background-color: #f0b7b7;
+  transition: 0.2s ease;
+}
+
 /* center everything in game container */
 .maze-container {
   margin: 0px auto;
@@ -74,6 +79,13 @@ p {
   border-radius: 3px;
   cursor: pointer;
   position: relative;
+}
+
+/* disabled state */
+#controls button:disabled {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
 }
 
 /*
@@ -216,6 +228,16 @@ div.layer div {
  */
 .goal {
   background-image: url("shell.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/*
+ * Obstacle colors
+ */
+.obstacle {
+  background-image: url("wave.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
