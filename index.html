@@ -35,7 +35,7 @@
       </div>
     </div>
     <script>
-      window.level = 0;
+      window.level = 4;
       let app = {};
       const mazeMap = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -62,7 +62,7 @@
          *  Build an array of levels.
          */
         let levels = [];
-        // first level
+        // first level, done
         levels[0] = {
           map: mazeMap,
           player: {
@@ -86,7 +86,7 @@
           ],
           theme: "default",
         };
-        // second level
+        // second level, done
         levels[1] = {
           map: mazeMap,
           theme: "default",
@@ -110,7 +110,7 @@
             },
           ],
         };
-        // third level
+        // third level, done
         levels[2] = {
           map: mazeMap,
           theme: "default",
@@ -120,21 +120,21 @@
           },
           goal: {
             x: 14,
-            y: 3,
+            y: 11,
           },
           obstacles: [
             {
-              x: 5,
-              y: 15,
+              x: 6,
+              y: 9,
             },
 
             {
-              x: 10,
-              y: 15,
+              x: 12,
+              y: 5,
             },
           ],
         };
-        // fourth level
+        // fourth level, done
         levels[3] = {
           map: mazeMap,
           theme: "default",
@@ -143,18 +143,18 @@
             y: 15,
           },
           goal: {
-            x: 14,
-            y: 3,
+            x: 1,
+            y: 2,
           },
           obstacles: [
             {
-              x: 5,
-              y: 15,
+              x: 3,
+              y: 5,
             },
 
             {
-              x: 7,
-              y: 15,
+              x: 11,
+              y: 7,
             },
           ],
         };
@@ -167,18 +167,18 @@
             y: 15,
           },
           goal: {
-            x: 14,
-            y: 3,
+            x: 1,
+            y: 11,
           },
           obstacles: [
             {
-              x: 5,
+              x: 3,
               y: 15,
             },
 
             {
-              x: 7,
-              y: 15,
+              x: 4,
+              y: 7,
             },
           ],
         };
@@ -192,7 +192,7 @@
           this.el = document.getElementById(id);
 
           // level addition
-          this.level_idx = 0;
+          this.level_idx = window.level;
 
           // establish the basic properties common to all this objects.
           this.tileTypes = ["floor", "wall"];
@@ -500,6 +500,7 @@
 
           // get the level at this index.
           let level = levels[this.level_idx];
+          let currentLevel = this.level_idx + 1;
 
           // sync the map with the level map.
           this.map = level.map;
@@ -516,7 +517,7 @@
           this.obstacles = [...level.obstacles];
 
           // log the level change.
-          console.log("Level changed to " + this.level_idx);
+          console.log("Level changed to " + currentLevel);
         };
 
         /*
@@ -667,6 +668,7 @@
          */
         context.init = function (level_idx = 0) {
           let myGame = new Game("maze-container-1", levels[level_idx]);
+          let currentLevel = level_idx + 1;
 
           // encapsulate for multi-level
           myGame.placeLevel();
@@ -674,7 +676,7 @@
           // add listeners
           myGame.addListeners();
 
-          console.log("Game initialized from Level " + level_idx);
+          console.log("Game initialized from Level " + currentLevel);
         };
       })(app);
 
